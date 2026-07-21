@@ -1,0 +1,32 @@
+class Solution {
+public:
+    int maxIndexDifference(string &s) {
+        int n = s.size();
+
+        vector<int> dp(n);
+        vector<int> best(26, -1);
+
+        int ans = -1;
+
+        for (int i = n - 1; i >= 0; i--) {
+
+            dp[i] = i;
+
+            int cur = s[i] - 'a';
+
+            // Jump to immediate next alphabet if possible
+            if (cur < 25 && best[cur + 1] != -1) {
+                dp[i] = best[cur + 1];
+            }
+
+            // Update best reachable endpoint for this character
+            best[cur] = max(best[cur], dp[i]);
+
+            // If starting character is 'a'
+            if (s[i] == 'a')
+                ans = max(ans, dp[i] - i);
+        }
+
+        return ans;
+    }
+};
